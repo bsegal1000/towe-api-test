@@ -1,0 +1,53 @@
+---
+# Run commands from API
+- hosts: localhost
+
+  vars:
+    hostcmd_info:
+      test_sshd_1:
+        cmd: "bHMgLWx0ciAkSE9NRQo="
+        #cmd: "ls -ltr $HOME"
+        user_to_run: root
+      test_sshd_2:
+        cmd: "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
+        #cmd: "[ -d $HOME ] && echo success"
+        user_to_run: root
+
+  tasks:
+
+    - name: Gather subset of facts
+      setup:
+        gather_subset: '!all'
+
+    - name: Add hosts to group
+      add_host:
+        groups: group_to_use
+        hostname: "{{ item }}"
+        command_to_run: "{{ hostcmd_info[item]['cmd'] }}"
+        user_to_run: "{{ hostcmd_info[item]['user_to_run'] }}"
+      loop: "{{ hostcmd_info.keys() | list}}"
+
+- hosts: group_to_use
+  become: yes
+  become_user: ansible-test
+
+  vars:
+     command_to_run_dec64: "{{ command_to_run | b64decode | string}}"
+
+  tasks:
+    - debug:
+        msg:
+          - "{{ command_to_run_dec64 }}"
+
+    - name: Run command specified per host
+      shell: "{{ command_to_run_dec64 }}"
+      #shell: "{{ command_to_run }}"
+      register: speccommand
+      when: ansible_system == "Linux"
+
+    - debug:
+        msg:
+          - "{{ command_to_run_dec64 }}"
+          #- "{{ command_to_run }}"
+          - "{{ speccommand }}"
+          - "{{ user_to_run }}"
