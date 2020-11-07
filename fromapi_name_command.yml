@@ -2,16 +2,16 @@
 # Run commands from API
 - hosts: localhost
 
-  vars:
-    hostcmd_info:
-      test_sshd_1:
-        cmd: "bHMgLWx0ciAkSE9NRQo="
-        #cmd: "ls -ltr $HOME"
-        user_to_run: root
-      test_sshd_2:
-        cmd: "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
-        #cmd: "[ -d $HOME ] && echo success"
-        user_to_run: root
+ # vars:
+#    hostcmd_info:
+#      test_sshd_1:
+#        cmd: "bHMgLWx0ciAkSE9NRQo="
+#        #cmd: "ls -ltr $HOME"
+#        user_to_run: root
+#      test_sshd_2:
+#        cmd: "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
+#        #cmd: "[ -d $HOME ] && echo success"
+ #       user_to_run: root
 
   tasks:
 
