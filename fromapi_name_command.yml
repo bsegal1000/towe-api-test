@@ -39,15 +39,50 @@
         msg:
           - "{{ command_to_run_dec64 }}"
 
-    - name: Run command specified per host
-      shell: "{{ command_to_run_dec64 }}"
-      #shell: "{{ command_to_run }}"
-      register: speccommand
-      when: ansible_system == "Linux"
+    - name: Command bloc
+      block:
 
-    - debug:
-        msg:
-          - "{{ command_to_run_dec64 }}"
-          #- "{{ command_to_run }}"
-          - "{{ speccommand }}"
-          - "{{ user_to_run }}"
+        - name: Run command for Linux
+          shell: "{{ command_to_run_dec64 }}"
+            #shell: "{{ command_to_run }}"
+          register: linux_cmdout
+          when: ansible_system == "Linux"
+
+        - name: Run command for Windows
+          shell: "{{ command_to_run_dec64 }}"
+          #shell: "{{ command_to_run }}"
+          register: windows_cmdout
+          when: ansible_system == "Windows"
+
+      vars:
+         cmdout: "{{ linux_cmdout if ansible_system == 'Linux' else windows_cmdout }}"
+
+
+      always:
+        - debug:
+            msg:
+              - "Command run was {{ command_to_run_dec64 }}"
+              - "Stdout was {{ cmdout.stdout_lines }}"
+              - "Stderr was {{ cmdout.stderr_lines }}"
+              - "RC was {{ cmdout.rc }}"
+
+        - name: Set Tower WF Response
+          set_fact:
+            tower_wf_response: '{{ tower_wf_response | default({}) |
+                                   combine(
+                                     {
+                                      "cmd": cmdout.cmd,
+                                      "stdout": cmdout.stdout_lines,
+                                      "stderr": cmdout.stderr_lines,
+                                      "system": ansible_system,
+                                      "ansible_host": ansible_host,
+                                      "rc": cmdout.rc
+                                     }
+                                   )
+                                }}'
+
+        - name: Tower Response Facts
+          set_fact:
+            svalue: value
+          with_items:
+            - "{{ tower_wf_response | to_json }}"
