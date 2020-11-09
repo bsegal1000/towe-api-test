@@ -1,0 +1,24 @@
+---
+# Windows command run
+- name: Temp file creation
+  win_tempfile:
+    suffix: ps1
+    state: file
+  register: cmd_tempfile
+
+- name: Copy template to tempfile
+  win_template:
+    src: cmd_wrapper.j2
+    dest: "{{ cmd_tempfile.path }}"
+
+- name: Run command for Windows
+  win_command: "{{ cmd_tempfile.path }}"
+  #shell: "{{ command_to_run }}"
+  register: cmdout
+
+- name: Remove Windows tempfile
+  win_file:
+    path: "{{ cmd_tempfile.path }}"
+    state: absent
+  when: cmd_tempfile.path is defined
+...
