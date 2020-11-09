@@ -1,11 +1,15 @@
 ---
+---
 # Run commands from API
 - hosts: localhost
+  gather_facts: no
 
   vars:
     hostcmd_info:
       test_sshd_1:
-        cmd: "bHMgLWx0ciAkSE9NRQo="
+        cmd: "bXNnPSJTdWNjZXNzIjtpZiBbICEgLWQgJEhPTUUgXTsgdGhlbiBlY2hvICRtc2c7ZXhpdCAwOyBlbHNlIG1zZz0iRmFpbHVyZSI7IGVjaG8gJG1zZyA+JjI7IGV4aXQgMTtmaQ=="
+        #cmd: [ -f $HOME/does_not_exist ]
+        #cmd: "bHMgLWx0ciAkSE9NRQo="
         #cmd: "ls -ltr $HOME"
         user_to_run: root
       test_sshd_2:
@@ -14,10 +18,6 @@
         user_to_run: root
 
   tasks:
-
-    - name: Gather subset of facts
-      setup:
-        gather_subset: '!all'
 
     - name: Add hosts to group
       add_host:
@@ -35,28 +35,14 @@
      command_to_run_dec64: "{{ command_to_run | b64decode | string}}"
 
   tasks:
-    - debug:
-        msg:
-          - "{{ command_to_run_dec64 }}"
 
-    - name: Command bloc
+    - name: Gather subset of facts
+      setup:
+        gather_subset: '!all'
+
+    - name: Block for Linux or Windows execution
       block:
-
-        - name: Run command for Linux
-          shell: "{{ command_to_run_dec64 }}"
-            #shell: "{{ command_to_run }}"
-          register: linux_cmdout
-          when: ansible_system == "Linux"
-
-        - name: Run command for Windows
-          shell: "{{ command_to_run_dec64 }}"
-          #shell: "{{ command_to_run }}"
-          register: windows_cmdout
-          when: ansible_system == "Windows"
-
-      vars:
-         cmdout: "{{ linux_cmdout if ansible_system == 'Linux' else windows_cmdout }}"
-
+        - include_tasks: tasks/cmds-tasks-{{ ansible_system }}.yml
 
       always:
         - debug:
@@ -71,7 +57,7 @@
             tower_wf_response: '{{ tower_wf_response | default({}) |
                                    combine(
                                      {
-                                      "cmd": cmdout.cmd,
+                                      "cmd": command_to_run_dec64,
                                       "stdout": cmdout.stdout_lines,
                                       "stderr": cmdout.stderr_lines,
                                       "system": ansible_system,
@@ -81,8 +67,9 @@
                                    )
                                 }}'
 
-        - name: Tower Response Facts
+        - name: Tower response facts in JSON for job events fetch
           set_fact:
             svalue: value
           with_items:
             - "{{ tower_wf_response | to_json }}"
+...
