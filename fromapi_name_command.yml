@@ -1,5 +1,4 @@
 ---
----
 # Run commands from API
 - hosts: localhost
   gather_facts: no
