@@ -59,6 +59,8 @@
                                       "cmd": command_to_run_dec64,
                                       "stdout": cmdout.stdout_lines,
                                       "stderr": cmdout.stderr_lines,
+                                      "start": cmdout.start,
+                                      "end": cmdout.end,
                                       "system": ansible_system,
                                       "ansible_host": ansible_host,
                                       "rc": cmdout.rc
