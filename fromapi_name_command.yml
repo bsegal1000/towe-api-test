@@ -63,6 +63,7 @@
                                       "end": cmdout.end,
                                       "system": ansible_system,
                                       "ansible_host": ansible_host,
+                                      "inventory_hostname_short": inventory_hostname_short,
                                       "rc": cmdout.rc
                                      }
                                    )
