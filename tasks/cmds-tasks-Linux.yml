@@ -25,8 +25,8 @@
   always:
   
    - name: Get end time
-       set_fact:
-         time_after: "{{ now(fmt='%S.%f') }}"
+     set_fact:
+       time_after: "{{ now(fmt='%S.%f') }}"
          
    - name: Remove Linux tempfile
      file:
