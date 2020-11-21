@@ -5,26 +5,22 @@
 
   vars:
     hostcmd_info:
-      test_sshd_1:
-        cmd: "bXNnPSJTdWNjZXNzIjtpZiBbICEgLWQgJEhPTUUgXTsgdGhlbiBlY2hvICRtc2c7ZXhpdCAwOyBlbHNlIG1zZz0iRmFpbHVyZSI7IGVjaG8gJG1zZyA+JjI7IGV4aXQgMTtmaQ=="
-        #cmd: [ -f $HOME/does_not_exist ]
-        #cmd: "bHMgLWx0ciAkSE9NRQo="
-        #cmd: "ls -ltr $HOME"
-        user_to_run: root
-      test_sshd_2:
-        cmd: "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
-        #cmd: "[ -d $HOME ] && echo success"
-        user_to_run: root
-
+      - "host": "test_sshd_1"
+        "cmd": "bXNnPSJTdWNjZXNzIjtpZiBbICEgLWQgJEhPTUUgXTsgdGhlbiBlY2hvICRtc2c7ZXhpdCAwOyBlbHNlIG1zZz0iRmFpbHVyZSI7IGVjaG8gJG1zZyA+JjI7IGV4aXQgMTtmaQ=="
+      - "host": "test_sshd_2"
+        "cmd": "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
+    user_to_run: root
+    creds:
+      - 10
   tasks:
 
     - name: Add hosts to group
       add_host:
         groups: group_to_use
-        hostname: "{{ item }}"
-        command_to_run: "{{ hostcmd_info[item]['cmd'] }}"
-        user_to_run: "{{ hostcmd_info[item]['user_to_run'] }}"
-      loop: "{{ hostcmd_info.keys() | list}}"
+        hostname: "{{ item['host'] }}"
+        command_to_run: "{{ item['cmd'] }}"
+#        user_to_run: "{{ hostcmd_info[item]['user_to_run'] }}"
+      loop: "{{ hostcmd_info }}"
 
 - hosts: group_to_use
   become: yes
