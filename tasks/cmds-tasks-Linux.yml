@@ -14,6 +14,10 @@
 - name: Block for command run
   block:
   
+   - name: Get start time
+     set_fact:
+       time_before: "{{ now(fmt='%S.%f') }}"
+  
    - name: Run command for Linux
      command: "{{ cmd_tempfile.path }}"
      register: cmdout
