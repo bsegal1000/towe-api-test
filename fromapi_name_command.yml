@@ -8,7 +8,7 @@
       - "host": "test_sshd_1"
         "cmd": "bXNnPSJTdWNjZXNzIjtpZiBbICEgLWQgJEhPTUUgXTsgdGhlbiBlY2hvICRtc2c7ZXhpdCAwOyBlbHNlIG1zZz0iRmFpbHVyZSI7IGVjaG8gJG1zZyA+JjI7IGV4aXQgMTtmaQ=="
       - "host": "test_sshd_2"
-        "cmd": "WyAtZCAkSE9NRSBdICYmIGVjaG8gJEhPTUUgZXhpc3RzCg=="
+        "cmd": "bHMgLWx0ciAkSE9NRQ=="
     user_to_run: root
     creds:
       - 10
