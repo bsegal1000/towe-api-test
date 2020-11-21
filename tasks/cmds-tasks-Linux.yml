@@ -10,15 +10,23 @@
     src: cmd_wrapper.j2
     dest: "{{ cmd_tempfile.path }}"
     mode: '0750'
-
-- name: Run command for Linux
-  command: "{{ cmd_tempfile.path }}"
-  register: cmdout
-  ignore_errors: true
-
-- name: Remove Linux tempfile
-  file:
-    path: "{{ cmd_tempfile.path }}"
-    state: absent
-  when: cmd_tempfile.path is defined
+    
+- name: Block for command run
+  block:
+  
+   - name: Run command for Linux
+     command: "{{ cmd_tempfile.path }}"
+     register: cmdout
+     
+  always:
+  
+   - name: Get end time
+       set_fact:
+         time_after: "{{ now(fmt='%S.%f') }}"
+         
+   - name: Remove Linux tempfile
+     file:
+       path: "{{ cmd_tempfile.path }}"
+       state: absent
+     when: cmd_tempfile.path is defined
 ...
