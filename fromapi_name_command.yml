@@ -21,13 +21,19 @@
         command_to_run: "{{ item['cmd'] }}"
 #        user_to_run: "{{ hostcmd_info[item]['user_to_run'] }}"
       loop: "{{ hostcmd_info }}"
+      
+    - name: Set hostcmd_dict fact
+      set_fact:
+         hostcmd_dict: '{{ hostcmd_dict | default({}) | combine( { item["host"]: item["cmd"] } ) }}'
+      loop: "{{ hostcmd_info }}"
 
 - hosts: group_to_use
   become: yes
   become_user: ansible-test
 
   vars:
-     command_to_run_dec64: "{{ command_to_run | b64decode | string}}"
+#     command_to_run_dec64: "{{ command_to_run | b64decode | string}}"
+     command_to_run_dec64: "{{ hostvars['localhost']['hostcmd_dict'][ansible_host] | b64decode | string}}"
 
   tasks:
 
@@ -40,12 +46,18 @@
         - include_tasks: tasks/cmds-tasks-{{ ansible_system }}.yml
 
       always:
+      
+        - name: Calculate elapsed time of command run
+          set_fact:
+             elapsed_seconds: "{{ ( (time_after|to_datetime('%S.%f')) - (time_before|to_datetime('%S.%f')) ).total_seconds() }}"
+             
         - debug:
             msg:
               - "Command run was {{ command_to_run_dec64 }}"
               - "Stdout was {{ cmdout.stdout_lines }}"
               - "Stderr was {{ cmdout.stderr_lines }}"
               - "RC was {{ cmdout.rc }}"
+              - "Elapsed seconds was {{ elapsed_seconds }}"
 
         - name: Set Tower WF Response
           set_fact:
@@ -57,6 +69,7 @@
                                       "stderr": cmdout.stderr_lines,
                                       "start": cmdout.start,
                                       "end": cmdout.end,
+                                      "elapsed_seconds": elapsed_seconds,
                                       "system": ansible_system,
                                       "ansible_host": ansible_host,
                                       "inventory_hostname_short": inventory_hostname_short,
