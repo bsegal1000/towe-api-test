@@ -65,7 +65,6 @@
                                       "stderr": cmdout.stderr_lines,
                                       "start": cmdout.start,
                                       "end": cmdout.end,
-                                      "elapsed_seconds": elapsed_seconds,
                                       "system": ansible_system,
                                       "ansible_host": ansible_host,
                                       "inventory_hostname_short": inventory_hostname_short,
