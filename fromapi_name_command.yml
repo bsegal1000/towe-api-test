@@ -46,11 +46,7 @@
         - include_tasks: tasks/cmds-tasks-{{ ansible_system }}.yml
 
       always:
-      
-        - name: Calculate elapsed time of command run
-          set_fact:
-             elapsed_seconds: "{{ ( (time_after|to_datetime('%S.%f')) - (time_before|to_datetime('%S.%f')) ).total_seconds() }}"
-             
+                  
         - debug:
             msg:
               - "Command run was {{ command_to_run_dec64 }}"
