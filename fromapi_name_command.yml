@@ -53,7 +53,7 @@
               - "Stdout was {{ cmdout.stdout_lines }}"
               - "Stderr was {{ cmdout.stderr_lines }}"
               - "RC was {{ cmdout.rc }}"
-              - "Elapsed seconds was {{ elapsed_seconds }}"
+              
 
         - name: Set Tower WF Response
           set_fact:
