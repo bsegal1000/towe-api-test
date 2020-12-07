@@ -14,20 +14,12 @@
 - name: Block for command run
   block:
   
-   - name: Get start time
-     set_fact:
-       time_before: "{{ now(fmt='%S.%f') }}"
-  
    - name: Run command for Linux
      command: "{{ cmd_tempfile.path }}"
      register: cmdout
      
   always:
-  
-   - name: Get end time
-     set_fact:
-       time_after: "{{ now(fmt='%S.%f') }}"
-         
+          
    - name: Remove Linux tempfile
      file:
        path: "{{ cmd_tempfile.path }}"
