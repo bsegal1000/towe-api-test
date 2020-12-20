@@ -28,6 +28,7 @@
       loop: "{{ hostcmd_info }}"
 
 - hosts: group_to_use
+  gather_facts: no
   become: yes
   become_user: ansible-test
 
