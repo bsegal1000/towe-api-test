@@ -1,0 +1,14 @@
+#!{{ user_shell }}
+export HOME={{ user_home }}
+{% if run_login_scripts %}
+[ -z "$TERM" ] && { export TERM=xterm ;}
+if [ -r $HOME/.bash_profile ]; then
+   . $HOME/.bash_profile
+elif [ -r $HOME/.bash_login ]; then
+   . $HOME/.bash_login
+fi
+if [ -r $HOME/.bashrc ]; then
+   . $HOME/.bashrc
+fi
+{% endif %}
+{{ command_to_run_dec64 }}
