@@ -1,5 +1,24 @@
 ---
 
+- name: Getent
+  getent:
+     database: passwd
+     key: "{{user_to_become}}"
+     split: ":"
+     
+- name: Set environment facts
+  set_fact:
+     user_home: "{{ getent_passwd[user_to_become][4] }}"
+     user_shell: "{{ getent_passwd[user_to_become][5] }}"
+     user_shell_basename: "{{ getent_passwd[user_to_become][5]|basename }}"
+     
+- debug:
+    msg:
+      - "user_home {{ user_home }}"
+      - "user_shell {{ user_shell }}"
+      - "user_shell_basename {{ user_shell_basename }}"
+      - "command {{ command_to_run_dec64 }}"
+
 - name: Temp file creation
   tempfile:
     state: file
@@ -7,7 +26,7 @@
 
 - name: Copy template to tempfile
   template:
-    src: cmd_wrapper.j2
+    src: cmd_wrapper_{{ ansible_system }}_{{ user_shell_basename }}.j2
     dest: "{{ cmd_tempfile.path }}"
     mode: '0750'
     
@@ -25,6 +44,7 @@
    - name: Remove Linux tempfile
      file:
        path: "{{ cmd_tempfile.path }}"
-       state: absent
+#       state: absent
+        state: file
      when: cmd_tempfile.path is defined
 ...
