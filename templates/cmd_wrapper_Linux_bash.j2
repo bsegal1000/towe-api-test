@@ -1,6 +1,6 @@
 #!{{ user_shell }}
 export HOME={{ user_home }}
-{% if run_login_scripts %}
+{% if run_login_scripts | default(0) %}
 [ -z "$TERM" ] && { export TERM=xterm ;}
 if [ -r $HOME/.bash_profile ]; then
    . $HOME/.bash_profile
