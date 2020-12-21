@@ -51,9 +51,9 @@
         - debug:
             msg:
               - "Command run was {{ command_to_run_dec64 }}"
-              - "Stdout was {{ cmdout.stdout_lines }}"
-              - "Stderr was {{ cmdout.stderr_lines }}"
-              - "RC was {{ cmdout.rc }}"
+              - "Stdout was {{ cmdout.stdout_lines if cmdout.stdout_lines is defined else ''}}"
+              - "Stderr was {{ cmdout.stderr_lines if cmdout.stderr_lines is defined else ''}}"
+              - "RC was {{ cmdout.rc if cmdout.rc is defined else '' }}"
               
 
         - name: Set Tower WF Response
@@ -62,14 +62,14 @@
                                    combine(
                                      {
                                       "cmd": command_to_run_dec64,
-                                      "stdout": cmdout.stdout_lines,
-                                      "stderr": cmdout.stderr_lines,
-                                      "start": cmdout.start,
-                                      "end": cmdout.end,
+                                      "stdout": cmdout.stdout_lines if cmdout.stdout_lines is defined else cmdout.msg if cmdout.msg is defined else "",
+                                      "stderr": cmdout.stderr_lines if cmdout.stderr_lines is defined else "",
+                                      "start": cmdout.start if cmdout.start is defined else "",
+                                      "end": cmdout.end if cmdout.end is defined else "",
                                       "system": ansible_system,
                                       "ansible_host": ansible_host,
                                       "inventory_hostname_short": inventory_hostname_short,
-                                      "rc": cmdout.rc
+                                      "rc": cmdout.rc if cmdout.rc is defined else ""
                                      }
                                    )
                                 }}'
