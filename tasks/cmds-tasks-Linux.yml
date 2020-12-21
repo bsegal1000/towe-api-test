@@ -45,6 +45,6 @@
      file:
        path: "{{ cmd_tempfile.path }}"
 #       state: absent
-        state: file
+       state: file
      when: cmd_tempfile.path is defined
 ...
