@@ -47,4 +47,8 @@
 #       state: absent
        state: file
      when: cmd_tempfile.path is defined
+     
+   - name: Get environment
+     command: env
+     register: envout
 ...
