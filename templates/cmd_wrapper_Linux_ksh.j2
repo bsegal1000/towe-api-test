@@ -3,6 +3,6 @@ HOME={{ user_home }}; export HOME
 {% if run_login_scripts | default(0) %}
 [ -z "$TERM" ] && { TERM=xterm; export TERM ;}
 [ -r $HOME/.profile ] && . $HOME/.profile
-[ -r $HOME/.kshrc ] && . $HOME/.kshrc
+#[ -r $HOME/.kshrc ] && . $HOME/.kshrc
 {% endif %}
 {{ command_to_run_dec64 }}
