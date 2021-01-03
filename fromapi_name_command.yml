@@ -30,7 +30,7 @@
 - hosts: group_to_use
   gather_facts: no
   become: yes
-  become_user: ansible-test
+  become_user: "{{ user_to_become }}"
 
   vars:
 #     command_to_run_dec64: "{{ command_to_run | b64decode | string}}"
