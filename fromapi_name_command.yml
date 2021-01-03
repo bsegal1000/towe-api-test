@@ -54,6 +54,7 @@
               - "Stdout was {{ cmdout.stdout_lines if cmdout.stdout_lines is defined else ''}}"
               - "Stderr was {{ cmdout.stderr_lines if cmdout.stderr_lines is defined else ''}}"
               - "RC was {{ cmdout.rc if cmdout.rc is defined else '' }}"
+              - "env is {{ envout.stdout_lines }}"
               
 
         - name: Set Tower WF Response
