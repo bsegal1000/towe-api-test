@@ -1,5 +1,5 @@
 #!{{ user_shell }}
-HOME={{ user_home }}; export HOME; LOGNAME={{ user_to_become }}; export LOGNAME; USER={{ user_to_become }}; export USER
+HOME={{ user_home }}; export HOME; LOGNAME={{ user_to_become }}; export LOGNAME; USER={{ user_to_become }}; export USER; SHELL={{ user_shell }}; export SHELL
 {% if run_login_scripts | default(0) %}
 [ -z "$TERM" ] && { TERM=xterm; export TERM ;}
 [ -r $HOME/.profile ] && . $HOME/.profile
