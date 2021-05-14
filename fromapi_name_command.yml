@@ -19,6 +19,10 @@
 #         windows_group: "{{ 'windows-dev' if (ansible_playbook_name | select('match','.*blahger.*')) else 'windows-prod' }}"
         windows_group: "{{ 'windows-dev' if ( 'tower-api' in tower_job_template_name ) else 'windows-prod' }}"
 
+    - debug:
+        msg:
+          - "windows_group is {{ windows_group }}"
+          - "tower job template is {{ tower_job_template_name }}"
 
     - name: Add hosts to group
       add_host:
