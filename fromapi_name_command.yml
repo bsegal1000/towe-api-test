@@ -17,7 +17,7 @@
     - name: set match fact
       set_fact:
 #         windows_group: "{{ 'windows-dev' if (ansible_playbook_name | select('match','.*blahger.*')) else 'windows-prod' }}"
-        windows_group: "{{ 'windows-dev' if ( 'tower-api' in tower_job_template_name ) else 'windows-prod' }}"
+        windows_group: "{{ 'windows-dev' if ( 'nonsense' in tower_job_template_name ) else 'windows-prod' }}"
 
     - debug:
         msg:
