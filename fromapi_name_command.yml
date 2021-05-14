@@ -66,8 +66,7 @@
               - "RC was {{ cmdout.rc if cmdout.rc is defined else '' }}"
               - "env is {{ envout.stdout_lines }}"
               - "tower job template name is {{ tower_job_template_name if tower_job_template_name is defined else '' }}"
-              - "windows group is {{ windows_group }}"
-              
+                            
 
         - name: Set Tower WF Response
           set_fact:
