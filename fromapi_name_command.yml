@@ -55,6 +55,7 @@
               - "Stderr was {{ cmdout.stderr_lines if cmdout.stderr_lines is defined else ''}}"
               - "RC was {{ cmdout.rc if cmdout.rc is defined else '' }}"
               - "env is {{ envout.stdout_lines }}"
+              - "tower job template name is {{ tower_job_template_name if tower_job_template_name is defined else '' }}"
               
 
         - name: Set Tower WF Response
